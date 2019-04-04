@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/tablaJornada"
+    tools:context=".Jornada">
+    <TableRow
+        android:paddingTop="15dp"
+        android:paddingBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        >
+
+        <Spinner android:id="@+id/spJornadas"
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+        </Spinner>
+
+    </TableRow>
+
+    <TableRow android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tablaEncabezado"
+        >
+
+        <TextView
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@color/back"
+            android:textColor="@color/tex"
+            android:text="@string/local"
+           />
+
+        <TextView
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@color/back"
+            android:textColor="@color/tex"
+            android:text="@string/empate"
+            />
+
+        <TextView
+            android:layout_weight=".33"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@color/back"
+            android:textColor="@color/tex"
+            android:text="@string/visitante"
+            />
+    </TableRow>
+
+
+    <!-- TODO: Update blank fragment layout -->
+
+</TableLayout>
+
