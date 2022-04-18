@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/tablaJornada"
+    android:layout_height="wrap_content"
+    android:isScrollContainer="true"
+    android:id="@+id/scrollPrincipal"
     tools:context=".Jornada">
+    <TableLayout
+        android:id="@+id/tablaJornada"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <TableRow
         android:paddingTop="15dp"
         android:paddingBottom="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         >
@@ -18,7 +25,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp">
+            android:layout_marginRight="30dp"
+
+            >
 
         </Spinner>
 
@@ -31,16 +40,16 @@
         >
 
         <TextView
-            android:layout_weight=".33"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:textSize="16sp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
+            android:layout_weight=".33"
             android:background="@color/back"
-            android:textColor="@color/tex"
+            android:gravity="center"
             android:text="@string/local"
-           />
+            android:textColor="@color/blanco" />
 
         <TextView
             android:layout_weight=".33"
@@ -49,9 +58,6 @@
             android:gravity="center"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:background="@color/back"
-            android:textColor="@color/tex"
-            android:text="@string/empate"
             />
 
         <TextView
@@ -59,10 +65,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="16sp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
             android:background="@color/back"
-            android:textColor="@color/tex"
+            android:textColor="@color/blanco"
             android:text="@string/visitante"
             />
     </TableRow>
@@ -72,3 +79,4 @@
 
 </TableLayout>
 
+</ScrollView>

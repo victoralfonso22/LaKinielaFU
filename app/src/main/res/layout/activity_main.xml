@@ -46,4 +46,15 @@
         android:layout_height="wrap_content"
         android:text="@string/btnIng" />
 
+    <ProgressBar
+        android:layout_margin="40dp"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:id="@+id/indeterminateBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:indeterminate="true"
+
+        />
+
 </LinearLayout>

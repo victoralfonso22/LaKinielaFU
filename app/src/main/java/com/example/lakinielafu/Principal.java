@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +42,8 @@ public class Principal extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
+        setupActionBar();
+
     }
 
     @Override
@@ -55,6 +58,7 @@ public class Principal extends AppCompatActivity {
             case (R.id.salir):
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -100,6 +104,15 @@ public class Principal extends AppCompatActivity {
                 default:
                     return "Jornada";
             }
+        }
+
+    }
+
+    private void setupActionBar(){
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+           // actionBar.setTitle("Otra actividad");
         }
     }
 

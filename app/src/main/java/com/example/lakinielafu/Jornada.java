@@ -1,8 +1,14 @@
 package com.example.lakinielafu;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.print.PrintAttributes;
@@ -10,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.transition.Slide;
 import android.support.v4.app.Fragment;
+import android.util.ArrayMap;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,10 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -54,20 +63,14 @@ public class Jornada extends Fragment {
     View vistaJornada;
     WebService webService = new WebService();
 
+
     private OnFragmentInteractionListener mListener;
 
     public Jornada() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Jornada.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static Jornada newInstance(String param1, String param2) {
         Jornada fragment = new Jornada();
@@ -86,14 +89,12 @@ public class Jornada extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
 
         vistaJornada = inflater.inflate(R.layout.fragment_jornada, container, false);
@@ -128,7 +129,7 @@ public class Jornada extends Fragment {
         spinJornada.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, final View view, int position, long id) {
 
 
                 Thread hilo = new Thread(){
@@ -136,18 +137,24 @@ public class Jornada extends Fragment {
                     public void run() {
                         super.run();
 
-                        int suma= spinJornada.getSelectedItemPosition() + 1;
+                        final int suma= spinJornada.getSelectedItemPosition() + 1;
                         final String datos =  webService.consumirWS("","",2,suma);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                final ArrayList<RadioGroup> radioGroups = new ArrayList<>();
                                 int objetosWS = webService.objetoJSon(datos);
+                                ScrollView scrollPrincipal = (ScrollView) vistaJornada.findViewById(R.id.scrollPrincipal);
+                                final TableLayout tablaPartidos = (TableLayout) vistaJornada.findViewById(R.id.tablaJornada);
+
+                                int count = tablaPartidos.getChildCount();
+                                for (int i = 2; i < count; i++) {
+                                    View child = tablaPartidos.getChildAt(i);
+                                    if (child instanceof TableRow) ((ViewGroup) child).removeAllViews();
+                                }
 
                                 if(objetosWS > 0){
-
-                                    TableLayout tablaPartidos = (TableLayout) vistaJornada.findViewById(R.id.tablaJornada);
-                                    TableRow idRowEncabezado = new TableRow(getActivity());
 
                                     TableRow.LayoutParams encaParam = new TableRow.LayoutParams();
                                     encaParam.height= TableRow.LayoutParams.WRAP_CONTENT;
@@ -161,17 +168,11 @@ public class Jornada extends Fragment {
                                     //textParam.span=3;
                                     textParam.gravity=Gravity.CENTER_HORIZONTAL;
                                     textParam.setLayoutDirection(Gravity.CENTER_HORIZONTAL);
-                                    textParam.leftMargin=10;
-                                    textParam.rightMargin = 10;
 
-                                    int count = tablaPartidos.getChildCount();
-                                    for (int i = 2; i < count; i++) {
-                                        View child = tablaPartidos.getChildAt(i);
-                                        if (child instanceof TableRow) ((ViewGroup) child).removeAllViews();
-                                    }
+                                    textParam.setMargins(10,20,10,20);
 
                                     ArrayList<JornadaBean> listaJornada = webService.regresaJornada(datos);
-                                    Toast.makeText(getActivity().getApplicationContext(),"mensaje"+datos,Toast.LENGTH_LONG).show();
+                                   // Toast.makeText(getActivity().getApplicationContext(),"mensaje"+datos,Toast.LENGTH_LONG).show();
 
                                     for(int x = 0; x< listaJornada.size();x++){
 
@@ -189,15 +190,21 @@ public class Jornada extends Fragment {
                                         local1.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                                         local1.setLayoutParams(textParam);
                                         local1.setGravity(Gravity.CENTER);
+                                        //local1.setId(Integer.valueOf(listaJornada.get(x).getId() + "1"));
+                                        local1.setId(Integer.valueOf(110));
 
                                         empate1.setLayoutParams(textParam);
                                         empate1.setGravity(Gravity.CENTER);
-                                        empate1.setText(listaJornada.get(x).getLocal().substring(0,1)+" - "+listaJornada.get(x).getVisitante().substring(0,1));
+                                        empate1.setText("Empate");
+                                        //empate1.setId(Integer.valueOf(listaJornada.get(x).getId() + "2"));
+                                        empate1.setId(Integer.valueOf(112));
 
                                         visitante1.setText(listaJornada.get(x).getVisitante());
                                         visitante1.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                                         visitante1.setLayoutParams(textParam);
                                         visitante1.setGravity(Gravity.CENTER);
+                                        //visitante1.setId(Integer.valueOf(listaJornada.get(x).getId() + "3"));
+                                        visitante1.setId(Integer.valueOf(113));
 
 
                                         radio.setOrientation(LinearLayout.HORIZONTAL);
@@ -207,6 +214,8 @@ public class Jornada extends Fragment {
                                         radio.addView(empate1);
                                         radio.addView(visitante1);
 
+                                        radio.setId(listaJornada.get(x).getId());
+                                        radioGroups.add(radio);
                                         radio.setLayoutParams(textParam);
                                         rowPartidos.addView(radio);
                                         tablaPartidos.addView(rowPartidos);
@@ -214,29 +223,106 @@ public class Jornada extends Fragment {
                                         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                             @Override
                                             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                                                RadioButton sel = (RadioButton) group.findViewById(checkedId);
-                                                Toast.makeText(getActivity(),"mensaje : "+sel.getText(),Toast.LENGTH_LONG).show();
-                                                sel.setBackgroundColor(getResources().getColor(R.color.seleccion));
+
                                                 int count = group.getChildCount();
+                                                for (int i = 0; i < count; i++) {
+                                                    View child = group.getChildAt(i);
+                                                    if (child instanceof RadioButton){
+                                                        //RadioButton sel = (RadioButton) child;
+                                                        if(((RadioButton) child).isChecked()) {
+                                                            group.setBackgroundColor(getColorBackActivity(vistaJornada));
+                                                             Toast.makeText(getActivity(),"mensaje : "+((RadioButton) child).getText()+" grupo "+group.getId()+" id "+((RadioButton) child).getId(),Toast.LENGTH_LONG).show();
+                                                            ((RadioButton) child).setBackgroundColor(getResources().getColor(R.color.seleccion));
+                                                            ((RadioButton) child).setTextColor(getResources().getColor(R.color.black));
+                                                            ((RadioButton) child).setTypeface(null, Typeface.BOLD);
 
-                                                    for (int i=count-1;i>=0;i--) {
-                                                        View o = group.getChildAt(i);
-                                                        if (o instanceof RadioButton) {
-                                                            if(!((RadioButton) o).isChecked()){
-                                                                o.setBackgroundColor(getResources().getColor(R.color.transparente));
-                                                            }
-
+                                                        }else{
+                                                            System.out.println("No están "+((RadioButton) child).getId());
+                                                            ((RadioButton) child).setBackgroundColor(getColorBackActivity(vistaJornada));
+                                                            ((RadioButton) child).setTextColor(getResources().getColor(R.color.black));
+                                                            ((RadioButton) child).setTypeface(null,Typeface.NORMAL);
                                                         }
                                                     }
+                                                }
+
+
                                             }
                                         });
 
                                     }
+                                    Button btnGuardar = new Button(getActivity());
+                                    btnGuardar.setText(getResources().getString(R.string.guardar));
+                                    btnGuardar.setLayoutParams(textParam);
 
+                                    TableRow rowBoton = new TableRow(getActivity().getApplicationContext());
+                                    rowBoton.addView(btnGuardar);
+
+                                    tablaPartidos.addView(rowBoton);
+                                    scrollPrincipal.removeAllViews();
+                                    scrollPrincipal.addView(tablaPartidos);
+
+                                    btnGuardar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            final ArrayMap<Integer, Integer> resultados = new ArrayMap<>();
+                                                       int countTableRow = radioGroups.size();
+                                                       boolean bandera = true;
+                                                       for (int y=0;y<countTableRow;y++){
+
+                                                           int count = radioGroups.get(y).getChildCount();
+
+                                                           if(radioGroups.get(y).getCheckedRadioButtonId()== -1){
+                                                               bandera=false;
+                                                               radioGroups.get(y).setBackgroundColor(getResources().getColor(R.color.rojo));
+                                                           }else{
+
+
+
+                                                               View child = radioGroups.get(y).getChildAt(y);
+                                                               if (child instanceof RadioButton){
+
+                                                                   if(((RadioButton) child).isChecked()) {
+
+                                                                       resultados.put(radioGroups.get(y).getId(),  ((RadioButton) child).getId()  );
+
+                                                                   }
+                                                               }
+
+
+                                                           }
+
+                                                       }
+
+                                                       if(bandera){
+                                                           AlertDialog.Builder alertaGuardar = new AlertDialog.Builder(getActivity());
+                                                           alertaGuardar.setMessage("¿Estás seguro?").setCancelable(false)
+                                                           .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                                               @Override
+                                                               public void onClick(DialogInterface dialog, int which) {
+
+                                                                webService.guardarJornada(suma,resultados);
+                                                               }
+                                                           })
+                                                           .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                               @Override
+                                                               public void onClick(DialogInterface dialog, int which) {
+
+                                                               }
+                                                           });
+
+                                                           alertaGuardar.show();
+
+                                                       }else{
+
+                                                           Toast.makeText(getActivity(),"Debes seleccinar todos los partidos",Toast.LENGTH_LONG).show();
+                                                       }
+
+                                        }
+                                    });
 
                                 }else{
 
-                                    Toast.makeText(getActivity().getApplicationContext(),"Usuario o contraseña incorrecto",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity().getApplicationContext(),"No existen partidos para esta jornada",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -245,7 +331,6 @@ public class Jornada extends Fragment {
                 };
                 hilo.start();
 
-
             }
 
             @Override
@@ -253,8 +338,6 @@ public class Jornada extends Fragment {
 
             }
         });
-
-
 
         return vistaJornada;
     }
@@ -302,5 +385,13 @@ public class Jornada extends Fragment {
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
+    }
+
+    public int getColorBackActivity(View view) {
+        int color = Color.TRANSPARENT;
+        Drawable background = view.getBackground();
+        if (background instanceof ColorDrawable)
+            color = ((ColorDrawable) background).getColor();
+        return color;
     }
 }

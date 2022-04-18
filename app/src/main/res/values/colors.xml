@@ -4,7 +4,9 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="back">#013965</color>
-    <color name="tex">#fff</color>
+    <color name="blanco">#fff</color>
     <color name="transparente">#FFFFFF</color>
-    <color name="seleccion">#F96565</color>
+    <color name="seleccion">#BCF5A9</color>
+    <color name="black">#000</color>
+    <color name="rojo">#FCBDAF</color>
 </resources>
